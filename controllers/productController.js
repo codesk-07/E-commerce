@@ -1,3 +1,4 @@
+
 const productService = require("../services/productService");
 
 const getAllProducts = (req, res) => {
@@ -12,8 +13,23 @@ const getProductById = (req, res) => {
 };
 
 const addProduct = (req, res) => {
-    const result = productService.addProduct();
-    res.send(result);
+
+    const productName = req.body.productName;
+
+    console.log("Product received:", productName);
+
+    if (!productName || !productName.trim()) {
+        return res.status(400).json({
+            message: "Product name is required"
+        });
+    }
+
+    const result = productService.addProduct(productName.trim());
+
+    res.status(201).json({
+        message: "Product added successfully",
+        product: result
+    });
 };
 
 module.exports = {

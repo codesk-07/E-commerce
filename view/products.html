@@ -8,20 +8,56 @@
 </head>
 <body>
 
-    <form>
+    <h1>Add New Product</h1>
+
+    <form id="productForm">
+
         <label for="product">Product Name</label>
 
         <input
             type="text"
             id="product"
             name="productName"
+            required
         >
 
         <button type="submit">Add Product</button>
+
     </form>
 
-    <h1>Fetching All Products using HTML</h1>
+    <h2 id="result"></h2>
+
+    <!-- Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        const form = document.getElementById("productForm");
+
+        form.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            const productName = document.getElementById("product").value;
+
+            try {
+                const response = await axios.post(
+                    "/products",
+                    { productName: productName }
+                );
+
+                console.log(response.data);
+
+                document.getElementById("result").innerText =
+                    response.data.message + ": " +
+                    response.data.product.productName;
+
+                form.reset();
+
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    </script>
 
 </body>
 </html>
-
