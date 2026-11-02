@@ -1,15 +1,23 @@
+const AppError = require("../utils/AppError");
+const cartService = require("../services/cartService");
 
-const getCartForUser = (req, res) => {
-    const userId = req.params.userId;
-    res.send(`Fetching cart for user with ID: ${userId}`);
-};
+const getCart = (req, res) => {
 
-const addProductToCart = (req, res) => {
     const userId = req.params.userId;
-    res.send(`Adding product to cart for user with ID: ${userId}`);
+
+    const result = cartService.getCart(userId);
+
+    if (!result) {
+        throw new AppError("Cart not found", 404);
+    }
+
+    res.status(200).json({
+        success: true,
+        data: result
+    });
+
 };
 
 module.exports = {
-    getCartForUser,
-    addProductToCart
+    getCart
 };
